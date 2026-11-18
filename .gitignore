@@ -1,0 +1,24 @@
+# build output
+/target/
+*.obj
+*.exe
+*.pdb
+*.log
+
+# local work notes / fixtures (not part of the product)
+/PROGRESS.md
+/NEXT.md
+/SPLIT.md
+/req_test.json
+/rt_test.js
+
+# renderer experiments
+/bench-gdi/
+/bench-slint/
+/bench-native/
+
+# generated schema dumps
+/gen/
+
+# unused prebuilt blob
+/assets

@@ -1,0 +1,65 @@
+﻿[package]
+name = "agent-manager"
+version = "1.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "代理管理：本机 AI CLI 的会话总览、版本检测与一键更新（iced 面板）"
+license = "MIT"
+publish = false
+
+# 只有一个面板窗口：无 daemon / 无托盘，面板进程内直连底层函数。
+[[bin]]
+name = "agent-manager-gui"
+path = "src/bin/agent-manager-gui.rs"
+
+[lib]
+name = "agent_manager"
+path = "src/lib.rs"
+
+[dependencies]
+iced = { version = "0.14", default-features = false, features = ["tiny-skia", "advanced", "tokio", "crisp"] }
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Direct2D",
+    "Win32_Graphics_Gdi",
+    "Win32_Graphics_Direct2D_Common",
+    "Win32_Graphics_DirectWrite",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_System_Com",
+    "Win32_System_DataExchange",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Memory",
+    "Win32_System_Ole",
+    "Win32_System_Registry",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_Ime",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "native-tls", "charset", "http2"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+tokio = { version = "1", features = ["rt-multi-thread", "process", "time", "fs", "net", "signal", "macros", "io-util", "sync"] }
+sha2 = "0.10"
+open = "5"
+dirs = "6"
+windows-sys = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
