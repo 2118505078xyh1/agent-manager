@@ -48,7 +48,8 @@ const CACHE_TTL_MS: u64 = 24 * 60 * 60 * 1000;
 /// 抓外网的超时。
 const FETCH_TIMEOUT_MS: u64 = 20_000;
 
-const USER_AGENT: &str = "Mozilla/5.0 (compatible; agent-manager/1.0)";
+/// opencode 的统计页会拒绝非浏览器 UA，所以统一用 Chrome 的 UA。
+const USER_AGENT: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
 /// 持久化文件放在 app state dir（`PI_STATE_DIR` 可覆盖，便于测试隔离）。
 /// 形状：`{ "<key>": { "at": <ms>, "items": [...] } }`。
@@ -371,7 +372,7 @@ pub async fn worldwide_report() -> Value {
             openrouter_models(&payload, TOP_N)
         }),
         network_card("opencode", crate::worldwide_opencode::STATS_URL, crate::worldwide_opencode::DAYS as u64, |html| {
-            crate::worldwide_opencode::parse_opencode_weekly(html, TOP_N)
+            crate::worldwide_opencode::parse_opencode_daily(html, TOP_N)
         }),
         network_card("apps", APPS_URL, DAYS as u64, |text| {
             let payload: Value = serde_json::from_str(text).map_err(|e| e.to_string())?;

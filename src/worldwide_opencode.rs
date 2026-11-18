@@ -12,18 +12,18 @@ pub const STATS_URL: &str = "https://opencode.ai/stats";
 /// opencode `tokens` 的乘数（十亿）。
 const OPENCODE_TOKEN_SCALE: u64 = 1_000_000_000;
 
-/// opencode 的榜是「本周」。
-pub const DAYS: usize = 7;
+/// opencode 的榜取最近一天（`leaderboard.daily`）。
+pub const DAYS: usize = 1;
 
 // ============================================================ opencode 解析
 
-/// 从 `opencode.ai/stats` 的 HTML 里取 `leaderboard.weekly`。
+/// 从 `opencode.ai/stats` 的 HTML 里取 `leaderboard.daily`（最近一天）。
 ///
-/// **抛错而不是返回空数组** —— 「页面结构变了」和「这一周没人用模型」在界面上
+/// **抛错而不是返回空数组** —— 「页面结构变了」和「这一天没人用模型」在界面上
 /// 长得一模一样，但前者要人管、后者不用。
-pub fn parse_opencode_weekly(html: &str, limit: usize) -> Result<Vec<Value>, String> {
-    let body = js_array_after(html, "weekly")
-        .ok_or_else(|| "opencode 统计页里没有 leaderboard.weekly（页面结构变了？）".to_string())?;
+pub fn parse_opencode_daily(html: &str, limit: usize) -> Result<Vec<Value>, String> {
+    let body = js_array_after(html, "daily")
+        .ok_or_else(|| "opencode 统计页里没有 leaderboard.daily（页面结构变了？）".to_string())?;
 
     let mut rows: Vec<Value> = Vec::new();
     for chunk in js_objects(&body) {
